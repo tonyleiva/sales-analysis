@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public enum DataType {
 
-	SALESMAN("001"), CLIENT("002"), SALE("003");
+	SALESMAN("001"), CLIENT("002"), SALE("003"), INVALID(null);
 
 	private final String dataTypeName;
 	private static HashMap<String, DataType> dataTypeMap;
@@ -15,8 +15,9 @@ public enum DataType {
         }
     }
 
-    public static DataType parse(String s) {
-        return dataTypeMap.get(s);
+    public static DataType parse(String text) {
+    	text = (text.length() >= 3) ? text.substring(0, 3) : null;
+        return dataTypeMap.get(text) == null ? INVALID : dataTypeMap.get(text);
     }
 	
 	DataType(final String text) {

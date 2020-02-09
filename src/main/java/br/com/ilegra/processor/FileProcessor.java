@@ -50,33 +50,26 @@ public class FileProcessor {
 			while (sc.hasNextLine()) {
 				line = sc.nextLine();
 				if (isNotBlank(line)) {
-					DataType dataType = getLineDataType(line);
-					if (dataType != null) {
-						switch (dataType) {
-						case SALESMAN:
-							salesmanList.add(Parser.parseSalesman(line));
-							break;
-						case CLIENT:
-							clientList.add(Parser.parseClient(line));
-							break;
-						case SALE:
-							salesList.add(Parser.parseSales(line));
-							break;
-						default:
-							break;
-						}
-					} else {
+					DataType dataType = DataType.parse(line);
+					switch (dataType) {
+					case SALESMAN:
+						salesmanList.add(Parser.parseSalesman(line));
+						break;
+					case CLIENT:
+						clientList.add(Parser.parseClient(line));
+						break;
+					case SALE:
+						salesList.add(Parser.parseSales(line));
+						break;
+					default:
 						logger.debug("DataType not found, line ingnored, LINE={}", line);
+						break;
 					}
 				}
 			}
 		} catch (FileNotFoundException e) {
 			logger.error("File not found - FILENAME={}", file.getName());
 		}
-	}
-
-	private DataType getLineDataType(String line) {
-		return DataType.parse(line.substring(0, 3));
 	}
 
 	private void saveOutput(File file, Path outputDirectory) {
