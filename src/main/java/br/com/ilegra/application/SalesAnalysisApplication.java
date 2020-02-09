@@ -1,15 +1,15 @@
 package br.com.ilegra.application;
 
-import static br.com.ilegra.constants.Constants.OUT_DIRECTORY;
 import static br.com.ilegra.constants.Constants.IN_DIRECTORY;
+import static br.com.ilegra.constants.Constants.OUT_DIRECTORY;
 import static br.com.ilegra.constants.Constants.USER_HOME;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import br.com.ilegra.service.PollingFilesService;
 import br.com.ilegra.service.PollingFilesServiceImpl;
@@ -34,7 +34,7 @@ public class SalesAnalysisApplication {
 				Thread.currentThread().interrupt();
 			}
 		} else {
-			logger.error("There is something wrong with the directory - PATH=" + inputDirectory.toAbsolutePath());
+			logger.error("There is something wrong with the directory - PATH={}", inputDirectory.toAbsolutePath());
 		}
 
 		logger.info("Application ended");

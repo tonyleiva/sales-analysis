@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import br.com.ilegra.constants.DataType;
 import br.com.ilegra.model.Client;
@@ -26,7 +26,6 @@ import br.com.ilegra.model.Salesman;
 import br.com.ilegra.util.Parser;
 
 public class FileProcessor {
-
 	private static final Logger logger = LogManager.getLogger(FileProcessor.class);
 
 	private List<Salesman> salesmanList = new ArrayList<>();
@@ -38,13 +37,13 @@ public class FileProcessor {
 			loadContent(file);
 			saveOutput(file, outputDirectory);
 		} else {
-			logger.error(
-					"File to process does not exists, PATH=" + file.getAbsolutePath() + " FILENAME=" + file.getName());
+			logger.error("File to process does not exists, PATH={}  FILENAME={}", 
+					file.getAbsolutePath(), file.getName());
 		}
 	}
 
 	private void loadContent(File file) {
-		logger.info("Load file content - FILENAME=" + file.getName());
+		logger.info("Loading file content - FILENAME={}", file.getName());
 
 		String line;
 		try (Scanner sc = new Scanner(file)) {
@@ -67,12 +66,12 @@ public class FileProcessor {
 							break;
 						}
 					} else {
-						logger.debug("DataType not found, line ingnored, LINE=" + line);
+						logger.debug("DataType not found, line ingnored, LINE={}", line);
 					}
 				}
 			}
 		} catch (FileNotFoundException e) {
-			logger.error("File not found - FILENAME=" + file.getName());
+			logger.error("File not found - FILENAME={}", file.getName());
 		}
 	}
 
@@ -81,7 +80,7 @@ public class FileProcessor {
 	}
 
 	private void saveOutput(File file, Path outputDirectory) {
-		logger.info("Save the output of file - FILENAME=" + file.getName());
+		logger.info("Saving the output file - FILENAME={}", getOutputFilename(file));
 
 		StringBuilder fileContent = new StringBuilder()
 				.append(String.format("- Quantidade de clientes no arquivo de entrada = %d%n", clientList.size()))
@@ -119,5 +118,9 @@ public class FileProcessor {
 		if (minQuantitySale.isPresent())
 			worstSalesman = minQuantitySale.get().getSalesmanName();
 		return worstSalesman;
+	}
+
+	private String getOutputFilename(File file) {
+		return file.getName().replace(EXTENSION_FILE, ".done") + EXTENSION_FILE;
 	}
 }

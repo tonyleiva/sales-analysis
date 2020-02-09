@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import br.com.ilegra.processor.FileProcessor;
 
@@ -40,7 +40,7 @@ public class PollingFilesServiceImpl implements PollingFilesService {
 	}
 
 	public void processNewFilesAddedInDirectory(Path inputDirectory, Path outputDirectory) throws InterruptedException {
-		logger.info("Wainting new files in directory to process");
+		logger.info("Waiting for new files in the directory to process");
 		try (WatchService watchService = FileSystems.getDefault().newWatchService()) {
 			inputDirectory.register(watchService, ENTRY_CREATE);
 
