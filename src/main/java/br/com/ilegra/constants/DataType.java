@@ -1,23 +1,19 @@
 package br.com.ilegra.constants;
 
-import java.util.HashMap;
+import java.util.Arrays;
 
 public enum DataType {
 
-	SALESMAN("001"), CLIENT("002"), SALE("003"), INVALID(null);
+	SALESMAN("001"), CLIENT("002"), SALE("003"), INVALID("INVALID");
 
 	private final String dataTypeName;
-	private static HashMap<String, DataType> dataTypeMap;
-    static {
-    	dataTypeMap = new HashMap<>();
-        for (DataType type : DataType.values()) {
-            dataTypeMap.put(type.toString(), type);
-        }
-    }
 
     public static DataType parse(String text) {
-    	text = (text.length() >= 3) ? text.substring(0, 3) : null;
-        return dataTypeMap.get(text) == null ? INVALID : dataTypeMap.get(text);
+    	String code = (text.length() >= 3) ? text.substring(0, 3) : DataType.INVALID.dataTypeName;
+    	return Arrays.stream(values())
+    			.filter(dataType -> dataType.dataTypeName.equals(code))
+    			.findFirst()
+    			.orElse(INVALID);
     }
 	
 	DataType(final String text) {

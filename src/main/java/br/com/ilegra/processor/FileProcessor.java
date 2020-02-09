@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -97,8 +98,7 @@ public class FileProcessor {
 
 	private String getMostExpensiveSaleId() {
 		String mostExpensiveSaleId = EMPTY;
-		Optional<Sale> mostExpensiveSale = salesList.stream()
-				.max((Sale o1, Sale o2) -> (o1.getTotalSaleAmount().compareTo(o2.getTotalSaleAmount())));
+		Optional<Sale> mostExpensiveSale = salesList.stream().max(Comparator.comparing(Sale::getTotalSaleAmount));
 		if (mostExpensiveSale.isPresent())
 			mostExpensiveSaleId = mostExpensiveSale.get().getId();
 		return mostExpensiveSaleId;
@@ -106,10 +106,9 @@ public class FileProcessor {
 
 	private String getTheWorstSalesman() {
 		String worstSalesman = EMPTY;
-		Optional<Sale> minQuantitySale = salesList.stream()
-				.min((Sale o1, Sale o2) -> (o1.getTotalSaleAmount().compareTo(o2.getTotalSaleAmount())));
-		if (minQuantitySale.isPresent())
-			worstSalesman = minQuantitySale.get().getSalesmanName();
+		Optional<Sale> minSaleAmount = salesList.stream().min(Comparator.comparing(Sale::getTotalSaleAmount));
+		if (minSaleAmount.isPresent())
+			worstSalesman = minSaleAmount.get().getSalesmanName();
 		return worstSalesman;
 	}
 
