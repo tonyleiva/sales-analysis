@@ -1,0 +1,11 @@
+directory:
+  inputPath: "/data/in"
+  outputPath: "/data/out"
+
+file:
+  extension: ".dat"
+
+delimiter:
+  lineProperties: "ç"
+  items: ","
+  itemProperties: "-"

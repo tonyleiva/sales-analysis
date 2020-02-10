@@ -1,8 +1,8 @@
 package br.com.ilegra.processor;
 
 import static br.com.ilegra.constants.Constants.EMPTY;
-import static br.com.ilegra.constants.Constants.EXTENSION_FILE;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static br.com.ilegra.properties.Properties.getProperties;
+import static br.com.ilegra.util.Parser.isValidLine;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,28 +28,30 @@ import br.com.ilegra.model.Salesman;
 import br.com.ilegra.util.Parser;
 
 public class FileProcessor {
-	private static final Logger logger = LogManager.getLogger(FileProcessor.class);
 
-	private List<Salesman> salesmanList = new ArrayList<>();
-	private List<Sale> salesList = new ArrayList<>();
-	private List<Client> clientList = new ArrayList<>();
+	private static final Logger logger = LogManager.getLogger(FileProcessor.class);
+	private static final String EXTENSION_FILE = getProperties().getFile().getExtension();
 
 	public List<String> loadContent(File file) {
 		logger.info("Loading file content - FILENAME={}", file.getName());
 		List<String> fileLines = new ArrayList<>();
 		try(Stream<String> fileContent = Files.lines(file.toPath())) {
-			fileLines = fileContent.collect(Collectors.toList());
+			fileLines = fileContent.filter(StringUtils::isNotBlank).collect(Collectors.toList());
 		} catch (IOException e) {
 			logger.debug("Error loading the file content, EX={}", e.getCause());
 		}
 		return fileLines;
 	}
 
-	public void saveOutput(List<String> fileLines, File file, Path outputDirectory) {
-		logger.info("Saving the output file - FILENAME={}", getOutputFilename(file));
-		
+	public void saveOutput(List<String> fileLines, String inputFilename, Path outputDirectory) {
+		logger.info("Saving the output file - FILENAME={}", getOutputFilename(inputFilename));
+
+		final List<Salesman> salesmanList = new ArrayList<>();
+		final List<Sale> salesList = new ArrayList<>();
+		final List<Client> clientList = new ArrayList<>();
+
 		for (String line : fileLines) {
-			if (isNotBlank(line)) {
+			if (isValidLine(line)) {
 				DataType dataType = DataType.parse(line);
 				switch (dataType) {
 				case SALESMAN:
@@ -67,27 +70,29 @@ public class FileProcessor {
 			}
 		}
 
-		StringBuilder fileContent = new StringBuilder()
-				.append(String.format("- Quantidade de clientes no arquivo de entrada = %d%n", clientList.size()))
-				.append(String.format("- Quantidade de vendedor no arquivo de entrada = %d%n", salesList.size()))
-				.append(String.format("- ID da venda mais cara = %s%n", getMostExpensiveSaleId()))
-				.append(String.format("- O pior vendedor = %s%n", getTheWorstSalesman()));
-
 		File outputFile = new File(outputDirectory.toString());
 		if (!outputFile.exists()) {
 			outputFile.mkdir();
 		}
 
-		String outputFilename = getOutputFilename(file);
-		Path path = Paths.get(outputDirectory.toString(), outputFilename);
+		Path path = Paths.get(outputDirectory.toString(), getOutputFilename(inputFilename));
 		try {
-			Files.writeString(path, fileContent.toString(), StandardCharsets.UTF_8);
+			Files.writeString(path, createFileContent(salesmanList, salesList, clientList), StandardCharsets.UTF_8);
 		} catch (IOException e) {
 			logger.error("Error writing the output file, EX={}", e.getCause());
 		}
 	}
 
-	private String getMostExpensiveSaleId() {
+	private String createFileContent(List<Salesman> salesmanList, List<Sale> salesList, List<Client> clientList) {
+		StringBuilder fileContent = new StringBuilder()
+				.append(String.format("- Quantidade de clientes no arquivo de entrada = %d%n", clientList.size()))
+				.append(String.format("- Quantidade de vendedor no arquivo de entrada = %d%n", salesmanList.size()))
+				.append(String.format("- ID da venda mais cara = %s%n", getMostExpensiveSaleId(salesList)))
+				.append(String.format("- O pior vendedor = %s%n", getTheWorstSalesman(salesList)));
+		return fileContent.toString();
+	}
+
+	private String getMostExpensiveSaleId(List<Sale> salesList) {
 		String mostExpensiveSaleId = EMPTY;
 		Optional<Sale> mostExpensiveSale = salesList.stream().max(Comparator.comparing(Sale::getTotalSaleAmount));
 		if (mostExpensiveSale.isPresent())
@@ -95,7 +100,7 @@ public class FileProcessor {
 		return mostExpensiveSaleId;
 	}
 
-	private String getTheWorstSalesman() {
+	private String getTheWorstSalesman(List<Sale> salesList) {
 		String worstSalesman = EMPTY;
 		Optional<Sale> minSaleAmount = salesList.stream().min(Comparator.comparing(Sale::getTotalSaleAmount));
 		if (minSaleAmount.isPresent())
@@ -103,7 +108,7 @@ public class FileProcessor {
 		return worstSalesman;
 	}
 
-	private String getOutputFilename(File file) {
-		return file.getName().replace(EXTENSION_FILE, ".done") + EXTENSION_FILE;
+	private String getOutputFilename(String inputFilename) {
+		return inputFilename.replace(EXTENSION_FILE, ".done") + EXTENSION_FILE;
 	}
 }

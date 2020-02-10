@@ -1,8 +1,7 @@
 package br.com.ilegra.service;
 
-import static br.com.ilegra.constants.Constants.IN_DIRECTORY;
-import static br.com.ilegra.constants.Constants.OUT_DIRECTORY;
-import static org.junit.Assert.assertTrue;
+import static br.com.ilegra.properties.Properties.getProperties;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -12,19 +11,22 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class PollingFilesServiceTest {
+class PollingFilesServiceTest {
 
+	private static final String IN_DIRECTORY = getProperties().getDirectory().getInputPath();
+	private static final String OUT_DIRECTORY = getProperties().getDirectory().getOutputPath();
+			
 	private Path inputDirectory;
 	private Path outputDirectory;
 	
 	@BeforeEach
-	public void init() {
+	void init() {
 		inputDirectory = Paths.get("src/test/resources", IN_DIRECTORY);
 		outputDirectory = Paths.get("src/test/resources", OUT_DIRECTORY);
 	}
 
 	@Test
-	public void processFilesInDirectoryTest() {
+	void processFilesInDirectoryTest() {
 		PollingFilesService pollingFilesService = new PollingFilesServiceImpl();
 		pollingFilesService.processFilesInDirectory(inputDirectory, outputDirectory);
 
@@ -34,7 +36,7 @@ public class PollingFilesServiceTest {
 	}
 
 	@AfterEach
-    public void deleteOutputFile() {
+    void deleteOutputFile() {
 		File outputFile = new File(outputDirectory.toString() + "/example.done.dat");
 		outputFile.deleteOnExit();
 	}

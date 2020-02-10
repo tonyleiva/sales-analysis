@@ -1,8 +1,7 @@
 package br.com.ilegra.util;
 
-import static br.com.ilegra.constants.Constants.ITEMS_DELIMITER;
-import static br.com.ilegra.constants.Constants.ITEM_PROP_DELIMITER;
-import static br.com.ilegra.constants.Constants.LINE_DELIMITER;
+import static br.com.ilegra.properties.Properties.getProperties;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +10,20 @@ import br.com.ilegra.model.Client;
 import br.com.ilegra.model.Item;
 import br.com.ilegra.model.Sale;
 import br.com.ilegra.model.Salesman;
-
 public class Parser {
 
 	private Parser() {
+	}
+
+	private static final String LINE_DELIMITER = getProperties().getDelimiter().getLineProperties();
+	private static final String ITEMS_DELIMITER = getProperties().getDelimiter().getItems();
+	private static final String ITEM_PROP_DELIMITER = getProperties().getDelimiter().getItemProperties();
+
+	public static boolean isValidLine(String line) {
+		return isNotBlank(line) && 
+				(line.matches("^(001)ç([0-9]*)ç([\\s\\S+]*)ç([0-9]+).?([0-9]+)") ||
+				line.matches("^(002)ç([0-9]*)ç([\\s\\S+]*)ç([\\s\\S+]*)") ||
+				line.matches("^(003)ç([0-9]*)ç\\[(([0-9]+)-([0-9]+)-([0-9]+).?([0-9]+))(,(([0-9]+)-([0-9]+)-([0-9]+).?([0-9]+)))*\\]ç([\\s\\S+]*)"));
 	}
 
 	public static Salesman parseSalesman(String salesmanLine) {

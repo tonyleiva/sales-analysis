@@ -1,6 +1,5 @@
 package br.com.ilegra.service;
-
-import static br.com.ilegra.constants.Constants.EXTENSION_FILE;
+import static br.com.ilegra.properties.Properties.getProperties;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 
 import java.io.File;
@@ -23,6 +22,7 @@ import br.com.ilegra.processor.FileProcessor;
 public class PollingFilesServiceImpl implements PollingFilesService {
 
 	private static final Logger logger = LogManager.getLogger(PollingFilesServiceImpl.class);
+	private static final String EXTENSION_FILE = getProperties().getFile().getExtension();
 
 	public void processFilesInDirectory(Path inputDirectory, Path outputDirectory) {
 		logger.info("Process files in directory");
@@ -64,14 +64,14 @@ public class PollingFilesServiceImpl implements PollingFilesService {
 		}
 	}
 
-	private void processFile(File file, Path outputDirectory) {
-		if (file.exists()) {
+	private void processFile(File inputFile, Path outputDirectory) {
+		if (inputFile.exists()) {
 			FileProcessor fileProcessor = new FileProcessor();
-			List<String> fileLines = fileProcessor.loadContent(file);
-			fileProcessor.saveOutput(fileLines, file, outputDirectory);
+			List<String> fileLines = fileProcessor.loadContent(inputFile);
+			fileProcessor.saveOutput(fileLines, inputFile.getName(), outputDirectory);
 		} else {
-			logger.error("File to process does not exists, PATH={}  FILENAME={}", file.getAbsolutePath(),
-					file.getName());
+			logger.error("File to process does not exists, PATH={}  FILENAME={}", inputFile.getAbsolutePath(),
+					inputFile.getName());
 		}
 	}
 }

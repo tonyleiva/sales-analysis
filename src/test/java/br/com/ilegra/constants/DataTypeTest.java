@@ -1,10 +1,10 @@
 package br.com.ilegra.constants;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-public class DataTypeTest {
+class DataTypeTest {
 
 	@Test
 	void testSalesmanParse() {
@@ -23,6 +23,7 @@ public class DataTypeTest {
 	
 	@Test
 	void testInvalidParse() {
+		assertTrue(DataType.INVALID.equals(DataType.parse(null)));
 		assertTrue(DataType.INVALID.equals(DataType.parse("004")));
 		assertTrue(DataType.INVALID.equals(DataType.parse("0")));
 		assertTrue(DataType.INVALID.equals(DataType.parse("ABCD")));

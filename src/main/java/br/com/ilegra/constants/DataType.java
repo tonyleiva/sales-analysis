@@ -1,5 +1,7 @@
 package br.com.ilegra.constants;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 import java.util.Arrays;
 
 public enum DataType {
@@ -9,7 +11,7 @@ public enum DataType {
 	private final String dataTypeName;
 
     public static DataType parse(String text) {
-    	String code = (text.length() >= 3) ? text.substring(0, 3) : DataType.INVALID.dataTypeName;
+    	String code = (isNotBlank(text) && text.length() >= 3) ? text.substring(0, 3) : DataType.INVALID.dataTypeName;
     	return Arrays.stream(values())
     			.filter(dataType -> dataType.dataTypeName.equals(code))
     			.findFirst()
