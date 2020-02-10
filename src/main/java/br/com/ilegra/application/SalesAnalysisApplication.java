@@ -2,7 +2,7 @@ package br.com.ilegra.application;
 
 import static br.com.ilegra.constants.Constants.IN_DIRECTORY;
 import static br.com.ilegra.constants.Constants.OUT_DIRECTORY;
-import static br.com.ilegra.constants.Constants.USER_HOME;
+import static br.com.ilegra.constants.Constants.HOMEPATH;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,8 +21,8 @@ public class SalesAnalysisApplication {
 	public static void main(String[] args) {
 		logger.info("Application started");
 
-		Path inputDirectory = Paths.get(System.getProperty(USER_HOME) + IN_DIRECTORY);
-		Path outputDirectory = Paths.get(System.getProperty(USER_HOME) + OUT_DIRECTORY);
+		Path inputDirectory = Paths.get(System.getenv(HOMEPATH) + IN_DIRECTORY);
+		Path outputDirectory = Paths.get(System.getenv(HOMEPATH) + OUT_DIRECTORY);
 		if (Files.exists(inputDirectory) && Files.isDirectory(inputDirectory)) {
 			PollingFilesService pollingService = getPollingFilesService();
 			pollingService.processFilesInDirectory(inputDirectory, outputDirectory);
