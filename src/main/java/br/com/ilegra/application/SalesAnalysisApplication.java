@@ -41,7 +41,8 @@ public class SalesAnalysisApplication {
 	}
 
 	/**
-	 * Retrieve an implementation of PollingFilesService 
+	 * Retrieve an implementation of PollingFilesService
+	 * 
 	 * @return PollingFilesService implementation
 	 */
 	private static PollingFilesService getPollingFilesService() {

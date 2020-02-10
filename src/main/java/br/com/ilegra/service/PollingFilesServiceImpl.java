@@ -13,7 +13,6 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
@@ -28,12 +27,9 @@ public class PollingFilesServiceImpl implements PollingFilesService {
 	public void processFilesInDirectory(Path inputDirectory, Path outputDirectory) {
 		logger.info("Process files in directory");
 		try (Stream<Path> pathStream = Files.walk(inputDirectory.toAbsolutePath())) {
-			List<File> listFiles = pathStream.filter(file -> file.toString().endsWith(EXTENSION_FILE)).map(Path::toFile)
-					.collect(Collectors.toList());
-
-			for (File file : listFiles) {
-				processFile(file, outputDirectory);
-			}
+			pathStream.filter(file -> file.toString().endsWith(EXTENSION_FILE))
+				.map(Path::toFile)
+				.forEach(file -> processFile(file, outputDirectory));
 		} catch (IOException e) {
 			logger.error("Error walking through the files in path - EX={}", e.getCause());
 		}
@@ -41,6 +37,7 @@ public class PollingFilesServiceImpl implements PollingFilesService {
 
 	public void processNewFilesAddedInDirectory(Path inputDirectory, Path outputDirectory) throws InterruptedException {
 		logger.info("Waiting for new files in the directory to process");
+
 		try (WatchService watchService = FileSystems.getDefault().newWatchService()) {
 			inputDirectory.register(watchService, ENTRY_CREATE);
 
@@ -52,7 +49,8 @@ public class PollingFilesServiceImpl implements PollingFilesService {
 					if (watchEvent.kind() == ENTRY_CREATE && watchEvent.context() != null
 							&& watchEvent.context().toString().endsWith(EXTENSION_FILE)) {
 						processFile(
-								Paths.get(inputDirectory.toAbsolutePath().toString(), watchEvent.context().toString()).toFile(),
+								Paths.get(inputDirectory.toAbsolutePath().toString(), watchEvent.context().toString())
+										.toFile(),
 								outputDirectory);
 					}
 				}
@@ -67,6 +65,13 @@ public class PollingFilesServiceImpl implements PollingFilesService {
 	}
 
 	private void processFile(File file, Path outputDirectory) {
-		new FileProcessor().process(file, outputDirectory);
+		if (file.exists()) {
+			FileProcessor fileProcessor = new FileProcessor();
+			List<String> fileLines = fileProcessor.loadContent(file);
+			fileProcessor.saveOutput(fileLines, file, outputDirectory);
+		} else {
+			logger.error("File to process does not exists, PATH={}  FILENAME={}", file.getAbsolutePath(),
+					file.getName());
+		}
 	}
 }
