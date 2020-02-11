@@ -32,10 +32,16 @@ public class FileProcessor {
 	private static final Logger logger = LogManager.getLogger(FileProcessor.class);
 	private static final String EXTENSION_FILE = getProperties().getFile().getExtension();
 
+	/**
+	 * Load the file content in {@code String} lines
+	 * 
+	 * @param file The input file to load
+	 * @return string list containing the file lines
+	 */
 	public List<String> loadContent(File file) {
 		logger.info("Loading file content - FILENAME={}", file.getName());
 		List<String> fileLines = new ArrayList<>();
-		try(Stream<String> fileContent = Files.lines(file.toPath())) {
+		try (Stream<String> fileContent = Files.lines(file.toPath())) {
 			fileLines = fileContent.filter(StringUtils::isNotBlank).collect(Collectors.toList());
 		} catch (IOException e) {
 			logger.debug("Error loading the file content, EX={}", e.getCause());
@@ -43,6 +49,14 @@ public class FileProcessor {
 		return fileLines;
 	}
 
+	/**
+	 * Save the output of the {@code fileLines} list process into a file with name
+	 * based on {@code inputFilename}
+	 * 
+	 * @param fileLines       List containing the lines to process
+	 * @param inputFilename   the base to the output file name
+	 * @param outputDirectory directory where the output file will be save
+	 */
 	public void saveOutput(List<String> fileLines, String inputFilename, Path outputDirectory) {
 		logger.info("Saving the output file - FILENAME={}", getOutputFilename(inputFilename));
 

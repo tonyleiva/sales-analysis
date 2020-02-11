@@ -10,6 +10,7 @@ import br.com.ilegra.model.Client;
 import br.com.ilegra.model.Item;
 import br.com.ilegra.model.Sale;
 import br.com.ilegra.model.Salesman;
+
 public class Parser {
 
 	private Parser() {
@@ -19,13 +20,25 @@ public class Parser {
 	private static final String ITEMS_DELIMITER = getProperties().getDelimiter().getItems();
 	private static final String ITEM_PROP_DELIMITER = getProperties().getDelimiter().getItemProperties();
 
+	/**
+	 * Validates if the line is able to be parsed
+	 * 
+	 * @param line to validate
+	 * @return true if is valid, false otherwise
+	 */
 	public static boolean isValidLine(String line) {
 		return isNotBlank(line) && 
-				(line.matches("^(001)ç([0-9]*)ç([\\s\\S+]*)ç([0-9]+).?([0-9]+)") ||
-				line.matches("^(002)ç([0-9]*)ç([\\s\\S+]*)ç([\\s\\S+]*)") ||
+				(line.matches("^(001)ç([0-9]*)ç([\\s\\S+]*)ç([0-9]+).?([0-9]+)") || 
+				line.matches("^(002)ç([0-9]*)ç([\\s\\S+]*)ç([\\s\\S+]*)") || 
 				line.matches("^(003)ç([0-9]*)ç\\[(([0-9]+)-([0-9]+)-([0-9]+).?([0-9]+))(,(([0-9]+)-([0-9]+)-([0-9]+).?([0-9]+)))*\\]ç([\\s\\S+]*)"));
 	}
 
+	/**
+	 * Parse a validated Salesman text line
+	 * 
+	 * @param salesmanLine
+	 * @return Salesman instance
+	 */
 	public static Salesman parseSalesman(String salesmanLine) {
 		String lineWithoutDataType = getLineWithoutType(salesmanLine);
 		int firstDelimiter = getFirstDelimiter(lineWithoutDataType);
@@ -37,6 +50,12 @@ public class Parser {
 		return new Salesman(name, cpf, salary);
 	}
 
+	/**
+	 * Parse a validated Client text line
+	 * 
+	 * @param clientLine
+	 * @return Client instance
+	 */
 	public static Client parseClient(String clientLine) {
 		String lineWithoutDataType = getLineWithoutType(clientLine);
 		int firstDelimiter = getFirstDelimiter(lineWithoutDataType);
@@ -48,6 +67,12 @@ public class Parser {
 		return new Client(name, cnpj, businessArea);
 	}
 
+	/**
+	 * Parse a validated Sale text line
+	 * 
+	 * @param saleLine
+	 * @return Sale instance
+	 */
 	public static Sale parseSales(String saleLine) {
 		String lineWithoutDataType = getLineWithoutType(saleLine);
 		int firstDelimiter = getFirstDelimiter(lineWithoutDataType);

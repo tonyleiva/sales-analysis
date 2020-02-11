@@ -22,6 +22,9 @@ public class SalesAnalysisApplication {
 
 	private static final Logger logger = LogManager.getLogger(SalesAnalysisApplication.class);
 
+	/**
+	 * Load properties
+	 */
 	static {
 		try {
 			Yaml yaml = new Yaml();
