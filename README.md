@@ -1,63 +1,54 @@
-# Teste para Desenvolvedor - Ilegra
+# Sales Analysis
 
 Desenvolvimento de uma aplicação Java para análise e processamento de dados contidos dentro de arquivos. Os arquivos serão lidos a partir do diretório.
 
 ```bash
-%HOMEPATH%/[inputPath]
+%HOMEPATH%/[input]
 ```
 
-Onde por padrão [inputPath]='/data/in'. Mas este pode ser alterado no arquivo resources/application.yml.
+Onde por padrão [input]=```/data/in```. Mas este pode ser alterado no arquivo resources/application.yml.
 
-Para cada arquivo de entrada, será criado um arquivo de saída com o nome do arquivo de entrada, mas com '.done' adicionado antes da extensão. Por exemplo, para o arquivo de entrada 'file1.dat' o arquivo de saída terá como nome 'file1.done.dat'.
+Para cada arquivo de entrada, será criado um arquivo de saída com o nome do arquivo de entrada, mas com '-done' adicionado antes da extensão. Por exemplo, para o arquivo de entrada 'file1.dat' o arquivo de saída terá como nome 'file1-done.dat'.
 
 Os arquivos com o resultado da análise serão salvos no diretório:
 
 ```bash
-%HOMEPATH%/[outputPath]
+%HOMEPATH%/[output]
 ```
 
-Onde por padrão [outputPath]='/data/out'. Mas este pode ser alterado no arquivo resources/application.yml.
+Onde por padrão [output]=```/data/out```. Mas este pode ser alterado no arquivo resources/application.yml.
 
 Também podem ser alterados os valores padrão para as seguintes propriedades:
 
 ```bash
-file:
-  extension: ".dat"
-
-delimiter:
-  lineProperties: "ç"
-  items: ","
-  itemProperties: "-"
+app:
+  directory:
+    input: "/data/in" #diretório de entrada
+    output: "/data/out" #diretório de saída
+  file:
+    extension: ".dat" #extensão dos arquivos a ser processados
 ```
 
-Onde:
 
-'file > extension' é o format de arquivo a ser processado.
+## Testes
 
-'delimiter > lineProperties' é o separador das propriedades de uma linha nos arquivos a serem processados.
+Para executar os testes, a partir da raíz do projeto, executar um dos seguintes comandos:
 
-'delimiter > items' é o separador dos itens na entrada de uma venda
-
-'delimiter > itemProperties' é o separados das propriedades de cada item na entrada de uma venda.
-
-
-## Para executar os testes
 ```bash
-mvn test
+./gradlew test 
+
+./gradlew test jacocoTestReport #para gerar o relatório do JaCoCo
 ```
+- O relatório XML será gerado em ```build/reports/jacoco/test/jacocoTestReport.xml```
+- O relatório HTML será gerado em ```build/reports/jacoco/test/html/index.html```
 
-## Para compilar e criar o arquivo jar executável
+## Compilar e criar arquivo jar executável
 ```bash
-mvn package
+./gradlew build
 ```
+- O arquivo JAR será gerado em ```build/libs```
 
-## Para executar o programa 
+## Executar
 ```bash
-java -jar target/sales-analysis-0.0.1-SNAPSHOT-jar-with-dependencies.jar
-```
-
-Ou executar o jar já compilado na raiz do projeto:
-
-```bash
-java -jar sales-analysis.jar
+java -jar build/libs/sales-analysis-0.0.1-SNAPSHOT.jar
 ```

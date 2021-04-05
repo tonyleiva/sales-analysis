@@ -1,11 +1,21 @@
-directory:
-  inputPath: "/data/in"
-  outputPath: "/data/out"
+app:
+  directory:
+    input: "/data/in"
+    output: "/data/out"
+  file:
+    extension: ".dat"
+  delimiter:
+    lineProperties: "ç"
+    items: ","
+    itemProperties: "-"
 
-file:
-  extension: ".dat"
+logging:
+  level:
+    org.springframework.web: INFO
+    root: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} - [%-5level] [%t] %c{1} - %msg%n"
 
-delimiter:
-  lineProperties: "ç"
-  items: ","
-  itemProperties: "-"
+spring:
+  application:
+    name: sales-analysis
