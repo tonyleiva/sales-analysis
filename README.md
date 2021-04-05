@@ -1,3 +1,9 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=tonyleiva_sales-analysis&metric=alert_status)](https://sonarcloud.io/dashboard?id=tonyleiva_sales-analysis)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=tonyleiva_sales-analysis&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=tonyleiva_sales-analysis)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=tonyleiva_sales-analysis&metric=security_rating)](https://sonarcloud.io/dashboard?id=tonyleiva_sales-analysis)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=tonyleiva_sales-analysis&metric=code_smells)](https://sonarcloud.io/dashboard?id=tonyleiva_sales-analysis)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=tonyleiva_sales-analysis&metric=coverage)](https://sonarcloud.io/dashboard?id=tonyleiva_sales-analysis)
+
 # Sales Analysis
 
 Desenvolvimento de uma aplicação Java para análise e processamento de dados contidos dentro de arquivos. Os arquivos serão lidos a partir do diretório.
