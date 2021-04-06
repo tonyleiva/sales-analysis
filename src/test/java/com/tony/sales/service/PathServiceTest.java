@@ -6,15 +6,17 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.nio.file.Path;
 
+import static java.io.File.separatorChar;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PathServiceTest {
 
 	private static final String USER_DIR = "user.dir";
 	private static final String USER_DIRECTORY = System.getProperty("user.dir");
-	private static final String DATA_IN = "/src/test/resources/data/in";
-	private static final String DATA_OUT = "/src/test/resources/data/out";
-	private static final String DATA_OUT_TEMP = "/src/test/resources/data/out/temp";
+	private static final String RESOURCES = separatorChar + "src" + separatorChar + "test" + separatorChar + "resources";
+	private static final String DATA_IN = RESOURCES + separatorChar + "data"  + separatorChar + "in";
+	private static final String DATA_OUT = RESOURCES + separatorChar + "data" + separatorChar + "out";
+	private static final String DATA_OUT_TEMP = DATA_OUT + separatorChar + "temp";
 
 	@Test
 	void getInputPathOkTest() {
