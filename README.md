@@ -12,7 +12,7 @@ Desenvolvimento de uma aplicação Java para análise e processamento de dados c
 %HOMEPATH%/[input]
 ```
 
-Onde por padrão [input]=```/data/in```. Mas este pode ser alterado no arquivo resources/application.yml.
+Onde por padrão [input]=```/data/in```. Mas este pode ser alterado no arquivo [application.yml](https://github.com/tonyleiva/sales-analysis/blob/master/src/main/resources/application.yml).
 
 Para cada arquivo de entrada, será criado um arquivo de saída com o nome do arquivo de entrada, mas com '-done' adicionado antes da extensão. Por exemplo, para o arquivo de entrada 'file1.dat' o arquivo de saída terá como nome 'file1-done.dat'.
 
@@ -22,9 +22,9 @@ Os arquivos com o resultado da análise serão salvos no diretório:
 %HOMEPATH%/[output]
 ```
 
-Onde por padrão [output]=```/data/out```. Mas este pode ser alterado no arquivo resources/application.yml.
+Onde por padrão [output]=```/data/out```. Mas este pode ser alterado no arquivo [application.yml](https://github.com/tonyleiva/sales-analysis/blob/master/src/main/resources/application.yml).
 
-Também podem ser alterados os valores padrão para as seguintes propriedades:
+Veja a seguir as propriedades que podem ser alteradas:
 
 ```bash
 app:
