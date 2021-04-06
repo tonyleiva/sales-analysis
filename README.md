@@ -34,7 +34,7 @@ app:
   file:
     extension: ".dat" #extensão dos arquivos a ser processados
 ```
-
+*O diretório de entrada deve existir antes de inciar a execução.
 
 ## Testes
 
