@@ -14,18 +14,20 @@ import java.nio.file.Path;
 public class PathService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PathService.class);
-	public static final String USER_HOME = "user.home";
+	private final String userHome;
 	private final String inputDirectory;
 	private final String outputDirectory;
 
 	public PathService(@Value("${app.directory.input}") final String inputDirectory,
-					   @Value("${app.directory.output}") final String outputDirectory) {
+					   @Value("${app.directory.output}") final String outputDirectory,
+					   @Value("user.home}") final String userHome) {
 		this.inputDirectory = inputDirectory;
 		this.outputDirectory = outputDirectory;
+		this.userHome = userHome;
 	}
 
 	public Path getInputPath() {
-		final Path inputPath = Path.of(System.getProperty(USER_HOME), this.inputDirectory);
+		final Path inputPath = Path.of(System.getProperty(userHome), this.inputDirectory);
 		if (isNotValidDirectory(inputPath)) {
 			throw new PathException("Input directory does not exists " + inputPath);
 		}
@@ -38,7 +40,7 @@ public class PathService {
 	}
 
 	public String getOutputDirectory() {
-		final Path outputPath = Path.of(System.getProperty(USER_HOME), this.outputDirectory);
+		final Path outputPath = Path.of(System.getProperty(userHome), this.outputDirectory);
 		if (isNotValidDirectory(outputPath)) {
 			createDirectory(outputPath);
 		}
