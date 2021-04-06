@@ -56,5 +56,5 @@ Para executar os testes, a partir da raíz do projeto, executar um dos seguintes
 
 ## Executar
 ```bash
-java -jar build/libs/sales-analysis-0.0.1-SNAPSHOT.jar
+java -jar build/libs/sales-analysis-0.0.2.jar
 ```
