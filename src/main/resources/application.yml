@@ -4,10 +4,6 @@ app:
     output: "/data/out"
   file:
     extension: ".dat"
-  delimiter:
-    lineProperties: "ç"
-    items: ","
-    itemProperties: "-"
 
 logging:
   level:

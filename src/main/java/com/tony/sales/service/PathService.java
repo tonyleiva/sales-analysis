@@ -20,7 +20,7 @@ public class PathService {
 
 	public PathService(@Value("${app.directory.input}") final String inputDirectory,
 					   @Value("${app.directory.output}") final String outputDirectory,
-					   @Value("user.home}") final String userHome) {
+					   @Value("user.home") final String userHome) {
 		this.inputDirectory = inputDirectory;
 		this.outputDirectory = outputDirectory;
 		this.userHome = userHome;
