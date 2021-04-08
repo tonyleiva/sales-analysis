@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.time.Instant;
 import java.util.stream.Stream;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
@@ -28,9 +29,8 @@ public class FileMonitorService {
 	}
 
 	public void processFilesInDirectory() {
-		LOGGER.info("Process files existing in the directory");
+		LOGGER.info("Process files existing in the directory {}", pathService.getInputPath().toAbsolutePath());
 		try (Stream<Path> pathStream = Files.walk(pathService.getInputPath().toAbsolutePath(), 1)) {
-			LOGGER.info("ABSOLUTE_PATH={}", pathService.getInputPath().toAbsolutePath());
 			pathStream.map(Path::toFile)
 					.filter(file -> file.getName().endsWith(fileExtension))
 					.forEach(file -> processFile(file.getName()));
@@ -40,7 +40,7 @@ public class FileMonitorService {
 	}
 
 	public void processFilesEnteringInDirectory() throws InterruptedException {
-		LOGGER.info("Process files entering in the directory");
+		LOGGER.info("Process files entering in the directory {}", pathService.getInputPath().toAbsolutePath());
 		try {
 			final WatchService watchService = getWatchServiceRegistered();
 
@@ -57,11 +57,15 @@ public class FileMonitorService {
 	}
 
 	private void processFile(final String filename) {
+		LOGGER.info("Start processing file - FILENAME={}", filename);
+		final long startTime = Instant.now().toEpochMilli();
 		try {
 			salesReportService.createReport(filename);
 		} catch (Exception e){
 			LOGGER.error("An error occurs processing file - FILENAME={}, ERROR={}", filename, e.getMessage());
 		}
+		LOGGER.info("End processing file - FILENAME={}, ELAPSED_TIME={}ms",
+				filename, (Instant.now().toEpochMilli() - startTime));
 	}
 
 	private WatchService getWatchServiceRegistered() throws IOException {

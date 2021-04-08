@@ -27,7 +27,7 @@ public class SalesReportService {
 	}
 
 	public void createReport(final String filename) {
-		LOGGER.info("Creating the sales report - FILENAME={}", filename);
+		LOGGER.debug("Creating the sales report - FILENAME={}", filename);
 		final List<String> lines = fileService.getFileContent(filename);
 		final Map<LineLayoutType, List<LineLayout>> layoutLines = parserService.getLineLayoutMap(lines);
 

@@ -35,7 +35,7 @@ public class PathService {
 	}
 	public String getInputDirectory() {
 		final Path inputPath = getInputPath();
-		LOGGER.info("Input directory {}", inputPath);
+		LOGGER.debug("Input directory {}", inputPath);
 		return inputPath.toString();
 	}
 
@@ -44,7 +44,7 @@ public class PathService {
 		if (isNotValidDirectory(outputPath)) {
 			createDirectory(outputPath);
 		}
-		LOGGER.info("Output directory {}", outputPath);
+		LOGGER.debug("Output directory {}", outputPath);
 		return outputPath.toString();
 	}
 
