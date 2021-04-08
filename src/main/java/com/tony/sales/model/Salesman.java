@@ -41,7 +41,7 @@ public class Salesman implements LineLayout {
 	}
 
 	@Override
-	public LineLayoutType getLayoutType() {
+	public LineLayoutType getLineLayoutType() {
 		return LineLayoutType.SALESMAN;
 	}
 

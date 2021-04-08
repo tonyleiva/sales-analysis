@@ -40,7 +40,7 @@ public class Customer implements LineLayout {
 	}
 
 	@Override
-	public LineLayoutType getLayoutType() {
+	public LineLayoutType getLineLayoutType() {
 		return LineLayoutType.CUSTOMER;
 	}
 

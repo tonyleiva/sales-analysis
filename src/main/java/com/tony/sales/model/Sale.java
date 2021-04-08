@@ -51,7 +51,7 @@ public class Sale implements LineLayout {
 	}
 
 	@Override
-	public LineLayoutType getLayoutType() {
+	public LineLayoutType getLineLayoutType() {
 		return LineLayoutType.SALE;
 	}
 

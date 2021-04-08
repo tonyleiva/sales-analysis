@@ -6,6 +6,6 @@ import com.tony.sales.util.JsonSerializable;
 public interface LineLayout extends JsonSerializable {
 
 	@JsonIgnore
-	LineLayoutType getLayoutType();
+	LineLayoutType getLineLayoutType();
 
 }

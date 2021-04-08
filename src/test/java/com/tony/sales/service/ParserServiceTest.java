@@ -9,8 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,7 +34,7 @@ class ParserServiceTest {
 	}
 	@Test
 	void getSalesmanListOkTest() {
-		final EnumMap<LineLayoutType, List<LineLayout>> lineLayoutMap = parserService.getLineLayoutMap(lines);
+		final Map<LineLayoutType, List<LineLayout>> lineLayoutMap = parserService.getLineLayoutMap(lines);
 		final List<Salesman> salesmenList = lineLayoutMap.get(LineLayoutType.SALESMAN)
 				.stream()
 				.map(Salesman.class::cast)
@@ -48,7 +48,7 @@ class ParserServiceTest {
 
 	@Test
 	void getCustomerListOkTest() {
-		final EnumMap<LineLayoutType, List<LineLayout>> lineLayoutMap = parserService.getLineLayoutMap(lines);
+		final Map<LineLayoutType, List<LineLayout>> lineLayoutMap = parserService.getLineLayoutMap(lines);
 		final List<Customer> customerList = lineLayoutMap.get(LineLayoutType.CUSTOMER)
 				.stream()
 				.map(Customer.class::cast)
@@ -62,7 +62,7 @@ class ParserServiceTest {
 
 	@Test
 	void getSaleListOkTest() {
-		final EnumMap<LineLayoutType, List<LineLayout>> lineLayoutMap = parserService.getLineLayoutMap(lines);
+		final Map<LineLayoutType, List<LineLayout>> lineLayoutMap = parserService.getLineLayoutMap(lines);
 		final List<Sale> saleList = lineLayoutMap.get(LineLayoutType.SALE)
 				.stream()
 				.map(Sale.class::cast)

@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -34,7 +35,7 @@ class SalesReportServiceTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		final EnumMap<LineLayoutType, List<LineLayout>> lineLayoutMap = new EnumMap<>(LineLayoutType.class);
+		final Map<LineLayoutType, List<LineLayout>> lineLayoutMap = new EnumMap<>(LineLayoutType.class);
 		lineLayoutMap.put(LineLayoutType.SALESMAN, getSalesmanList());
 		lineLayoutMap.put(LineLayoutType.CUSTOMER, getCustomerList());
 		lineLayoutMap.put(LineLayoutType.SALE, getSalesList());

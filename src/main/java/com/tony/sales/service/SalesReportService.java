@@ -1,14 +1,16 @@
 package com.tony.sales.service;
 
-import com.tony.sales.model.*;
+import com.tony.sales.model.LineLayout;
+import com.tony.sales.model.LineLayoutType;
+import com.tony.sales.model.Sale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
@@ -27,7 +29,7 @@ public class SalesReportService {
 	public void createReport(final String filename) {
 		LOGGER.info("Creating the sales report - FILENAME={}", filename);
 		final List<String> lines = fileService.getFileContent(filename);
-		final EnumMap<LineLayoutType, List<LineLayout>> layoutLines = parserService.getLineLayoutMap(lines);
+		final Map<LineLayoutType, List<LineLayout>> layoutLines = parserService.getLineLayoutMap(lines);
 
 		final List<LineLayout> salesmanList = layoutLines.get(LineLayoutType.SALESMAN);
 		final List<LineLayout> customerList = layoutLines.get(LineLayoutType.CUSTOMER);

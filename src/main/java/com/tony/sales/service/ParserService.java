@@ -1,16 +1,19 @@
 package com.tony.sales.service;
 
 import com.tony.sales.exception.LineException;
-import com.tony.sales.model.*;
-import com.tony.sales.parser.*;
+import com.tony.sales.model.LineLayout;
+import com.tony.sales.model.LineLayoutType;
+import com.tony.sales.parser.CustomerParser;
+import com.tony.sales.parser.ParserLine;
+import com.tony.sales.parser.SaleParser;
+import com.tony.sales.parser.SalesmanParser;
 import org.springframework.stereotype.Service;
 
-import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class ParserService {
@@ -27,11 +30,10 @@ public class ParserService {
 		this.saleParser = saleParser;
 	}
 
-	public EnumMap<LineLayoutType, List<LineLayout>> getLineLayoutMap(final List<String> lines) {
+	public Map<LineLayoutType, List<LineLayout>> getLineLayoutMap(final List<String> lines) {
 		return lines.stream()
 				.map(line -> getParseLine(line).parse(line))
-				.collect(groupingBy(LineLayout::getLayoutType,
-						() -> new EnumMap<>(LineLayoutType.class), toList()));
+				.collect(groupingBy(LineLayout::getLineLayoutType));
 	}
 
 	private ParserLine getParseLine(final String line) {
