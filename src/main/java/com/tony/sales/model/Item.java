@@ -66,7 +66,7 @@ public class Item implements JsonSerializable {
 
 	@Override
 	public String toString() {
-		return this.toStringJson();
+		return this.toJsonString();
 	}
 
 }

@@ -1,9 +1,6 @@
 package com.tony.sales.service;
 
-import com.tony.sales.model.Customer;
-import com.tony.sales.model.Item;
-import com.tony.sales.model.Sale;
-import com.tony.sales.model.Salesman;
+import com.tony.sales.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -36,14 +34,16 @@ class SalesReportServiceTest {
 
 	@BeforeEach
 	public void beforeEach() {
+		final EnumMap<LineLayoutType, List<LineLayout>> lineLayoutMap = new EnumMap<>(LineLayoutType.class);
+		lineLayoutMap.put(LineLayoutType.SALESMAN, getSalesmanList());
+		lineLayoutMap.put(LineLayoutType.CUSTOMER, getCustomerList());
+		lineLayoutMap.put(LineLayoutType.SALE, getSalesList());
+		when(parserService.getLineLayoutMap(anyList())).thenReturn(lineLayoutMap);
 		when(fileService.getFileContent(anyString())).thenReturn(new ArrayList<>());
 	}
 
 	@Test
 	void createReportTest() {
-		when(parserService.getSalesmanList(anyList())).thenReturn(getSalesmanList());
-		when(parserService.getCustomerList(anyList())).thenReturn(getCustomerList());
-		when(parserService.getSaleList(anyList())).thenReturn(getSalesList());
 		final List<String> expectedFile = createExpectedFileContent(getCustomerList().size(), getSalesmanList().size(),
 				"001", "Salesman Name 2");
 
@@ -53,23 +53,23 @@ class SalesReportServiceTest {
 		assertTrue(true);
 	}
 
-	private List<Salesman> getSalesmanList() {
-		final List<Salesman> salesmanList = new ArrayList<>();
+	private List<LineLayout> getSalesmanList() {
+		final List<LineLayout> salesmanList = new ArrayList<>();
 		salesmanList.add(new Salesman("12345678901", "Salesman Name 1", BigDecimal.valueOf(4700.00)));
 		salesmanList.add(new Salesman("23456789012", "Salesman Name 2", BigDecimal.valueOf(1700.00)));
 		salesmanList.add(new Salesman("34567890123", "Salesman Name 3", BigDecimal.valueOf(8000.25)));
 		return salesmanList;
 	}
 
-	private List<Customer> getCustomerList() {
-		final List<Customer> customerList = new ArrayList<>();
+	private List<LineLayout> getCustomerList() {
+		final List<LineLayout> customerList = new ArrayList<>();
 		customerList.add(new Customer("12345678901234", "Customer name 1", "I.T."));
 		customerList.add(new Customer("23456789012345", "Customer name 2", "H.R."));
 		return customerList;
 	}
 
-	private List<Sale> getSalesList() {
-		final List<Sale> salesList = new ArrayList<>();
+	private List<LineLayout> getSalesList() {
+		final List<LineLayout> salesList = new ArrayList<>();
 
 		final List<Item> items1 = List.of(
 				new Item("1", 10, BigDecimal.valueOf(100.15)),

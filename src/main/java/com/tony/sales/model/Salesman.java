@@ -1,11 +1,9 @@
 package com.tony.sales.model;
 
-import com.tony.sales.util.JsonSerializable;
-
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class Salesman implements JsonSerializable {
+public class Salesman implements LineLayout {
 
 	private static final long serialVersionUID = -5916060185007373371L;
 	private String cpf;
@@ -43,6 +41,11 @@ public class Salesman implements JsonSerializable {
 	}
 
 	@Override
+	public LineLayoutType getLayoutType() {
+		return LineLayoutType.SALESMAN;
+	}
+
+	@Override
 	public int hashCode() {
 		return Objects.hash(cpf);
 	}
@@ -60,7 +63,7 @@ public class Salesman implements JsonSerializable {
 
 	@Override
 	public String toString() {
-		return this.toStringJson();
+		return this.toJsonString();
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.tony.sales.parser;
 
-import com.tony.sales.exception.ParseLineException;
+import com.tony.sales.exception.LineException;
 import com.tony.sales.model.Salesman;
 import org.junit.jupiter.api.Test;
 
@@ -23,6 +23,7 @@ class SalesmanParserTest {
 		final SalesmanParser parser = new SalesmanParser();
 
 		assertFalse(parser.isValid("001ç3456789234çPedro Paçocaç50000."));
+		assertFalse(parser.isValid("001ç0123456789012çPedro Paçocaç50000"));
 		assertFalse(parser.isValid("001ç345678865z34çPauloç40000.99"));
 	}
 
@@ -40,7 +41,7 @@ class SalesmanParserTest {
 	void parseExceptionTest() {
 		final SalesmanParser parser = new SalesmanParser();
 
-		assertThrows(ParseLineException.class, () -> parser.parse("001ç32456788650PauloPaçocaç40000.99"));
+		assertThrows(LineException.class, () -> parser.parse("001ç32456788650PauloPaçocaç40000.99"));
 	}
 
 }

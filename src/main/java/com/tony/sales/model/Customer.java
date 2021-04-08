@@ -1,10 +1,8 @@
 package com.tony.sales.model;
 
-import com.tony.sales.util.JsonSerializable;
-
 import java.util.Objects;
 
-public class Customer implements JsonSerializable {
+public class Customer implements LineLayout {
 
 	private static final long serialVersionUID = -7681233693502374522L;
 	private String cnpj;
@@ -42,6 +40,11 @@ public class Customer implements JsonSerializable {
 	}
 
 	@Override
+	public LineLayoutType getLayoutType() {
+		return LineLayoutType.CUSTOMER;
+	}
+
+	@Override
 	public int hashCode() {
 		return Objects.hash(cnpj);
 	}
@@ -59,7 +62,7 @@ public class Customer implements JsonSerializable {
 
 	@Override
 	public String toString() {
-		return this.toStringJson();
+		return this.toJsonString();
 	}
 
 }

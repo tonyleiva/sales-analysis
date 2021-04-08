@@ -1,13 +1,12 @@
 package com.tony.sales.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tony.sales.util.JsonSerializable;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
-public class Sale implements JsonSerializable {
+public class Sale implements LineLayout {
 
 	private static final long serialVersionUID = -8540416408985839612L;
 	private String saleId;
@@ -52,6 +51,11 @@ public class Sale implements JsonSerializable {
 	}
 
 	@Override
+	public LineLayoutType getLayoutType() {
+		return LineLayoutType.SALE;
+	}
+
+	@Override
 	public int hashCode() {
 		return Objects.hash(saleId);
 	}
@@ -69,7 +73,7 @@ public class Sale implements JsonSerializable {
 
 	@Override
 	public String toString() {
-		return this.toStringJson();
+		return this.toJsonString();
 	}
 
 }

@@ -1,17 +1,16 @@
 package com.tony.sales.service;
 
-import com.tony.sales.model.Customer;
-import com.tony.sales.model.Sale;
-import com.tony.sales.model.Salesman;
-import com.tony.sales.parser.CustomerParser;
-import com.tony.sales.parser.Parser;
-import com.tony.sales.parser.SaleParser;
-import com.tony.sales.parser.SalesmanParser;
+import com.tony.sales.exception.LineException;
+import com.tony.sales.model.*;
+import com.tony.sales.parser.*;
 import org.springframework.stereotype.Service;
 
+import java.util.EnumMap;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class ParserService {
@@ -28,28 +27,17 @@ public class ParserService {
 		this.saleParser = saleParser;
 	}
 
-	public List<Salesman> getSalesmanList(final List<String> lines) {
-		return getParsedStream(lines, salesmanParser)
-				.map(Salesman.class::cast)
-				.collect(Collectors.toList());
-	}
-
-	public List<Customer> getCustomerList(final List<String> lines) {
-		return getParsedStream(lines, customerParser)
-				.map(Customer.class::cast)
-				.collect(Collectors.toList());
-	}
-
-	public List<Sale> getSaleList(final List<String> lines) {
-		return getParsedStream(lines, saleParser)
-				.map(Sale.class::cast)
-				.collect(Collectors.toList());
-	}
-
-	private Stream<Object> getParsedStream(final List<String> lines, final Parser parser) {
+	public EnumMap<LineLayoutType, List<LineLayout>> getLineLayoutMap(final List<String> lines) {
 		return lines.stream()
-				.filter(line -> parser.isValid(line))
-				.map(line -> parser.parse(line));
+				.map(line -> getParseLine(line).parse(line))
+				.collect(groupingBy(LineLayout::getLayoutType,
+						() -> new EnumMap<>(LineLayoutType.class), toList()));
+	}
+
+	private ParserLine getParseLine(final String line) {
+		return Stream.of(salesmanParser, customerParser, saleParser)
+				.filter(parser -> parser.isValid(line))
+				.findFirst().orElseThrow(() -> new LineException("Error parsing the line: " + line));
 	}
 
 }

@@ -1,8 +1,6 @@
 package com.tony.sales.service;
 
-import com.tony.sales.model.Customer;
-import com.tony.sales.model.Sale;
-import com.tony.sales.model.Salesman;
+import com.tony.sales.model.*;
 import com.tony.sales.parser.CustomerParser;
 import com.tony.sales.parser.ItemParser;
 import com.tony.sales.parser.SaleParser;
@@ -11,7 +9,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -34,7 +34,11 @@ class ParserServiceTest {
 	}
 	@Test
 	void getSalesmanListOkTest() {
-		List<Salesman> salesmenList = parserService.getSalesmanList(lines);
+		final EnumMap<LineLayoutType, List<LineLayout>> lineLayoutMap = parserService.getLineLayoutMap(lines);
+		final List<Salesman> salesmenList = lineLayoutMap.get(LineLayoutType.SALESMAN)
+				.stream()
+				.map(Salesman.class::cast)
+				.collect(Collectors.toList());
 
 		assertEquals(2, salesmenList.size());
 		assertEquals("12345678901", salesmenList.get(0).getCpf());
@@ -44,7 +48,11 @@ class ParserServiceTest {
 
 	@Test
 	void getCustomerListOkTest() {
-		List<Customer> customerList = parserService.getCustomerList(lines);
+		final EnumMap<LineLayoutType, List<LineLayout>> lineLayoutMap = parserService.getLineLayoutMap(lines);
+		final List<Customer> customerList = lineLayoutMap.get(LineLayoutType.CUSTOMER)
+				.stream()
+				.map(Customer.class::cast)
+				.collect(Collectors.toList());
 
 		assertEquals(2, customerList.size());
 		assertEquals("23456754345443", customerList.get(0).getCnpj());
@@ -54,7 +62,11 @@ class ParserServiceTest {
 
 	@Test
 	void getSaleListOkTest() {
-		List<Sale> saleList = parserService.getSaleList(lines);
+		final EnumMap<LineLayoutType, List<LineLayout>> lineLayoutMap = parserService.getLineLayoutMap(lines);
+		final List<Sale> saleList = lineLayoutMap.get(LineLayoutType.SALE)
+				.stream()
+				.map(Sale.class::cast)
+				.collect(Collectors.toList());
 
 		assertEquals("10", saleList.get(0).getSaleId());
 		assertEquals(3, saleList.get(0).getItemList().size());

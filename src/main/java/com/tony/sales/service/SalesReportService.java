@@ -1,14 +1,13 @@
 package com.tony.sales.service;
 
-import com.tony.sales.model.Customer;
-import com.tony.sales.model.Sale;
-import com.tony.sales.model.Salesman;
+import com.tony.sales.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -27,16 +26,18 @@ public class SalesReportService {
 
 	public void createReport(final String filename) {
 		LOGGER.info("Creating the sales report - FILENAME={}", filename);
-		List<String> lines = fileService.getFileContent(filename);
+		final List<String> lines = fileService.getFileContent(filename);
+		final EnumMap<LineLayoutType, List<LineLayout>> layoutLines = parserService.getLineLayoutMap(lines);
 
-		final List<Salesman> salesmanList = parserService.getSalesmanList(lines);
-		final List<Customer> customerList = parserService.getCustomerList(lines);
-		final List<Sale> salesList = parserService.getSaleList(lines);
+		final List<LineLayout> salesmanList = layoutLines.get(LineLayoutType.SALESMAN);
+		final List<LineLayout> customerList = layoutLines.get(LineLayoutType.CUSTOMER);
+		final List<LineLayout> salesList = layoutLines.get(LineLayoutType.SALE);
 
 		fileService.saveFileContent(filename, createFileContent(salesmanList, customerList, salesList));
 	}
 
-	private List<String> createFileContent(List<Salesman> salesmanList, List<Customer> customerList, List<Sale> salesList) {
+	private List<String> createFileContent(final List<LineLayout> salesmanList, final List<LineLayout> customerList,
+										   final List<LineLayout> salesList) {
 		final List<String> lines = new ArrayList<>();
 
 		lines.add(String.format("- Quantidade de clientes no arquivo de entrada = %d", customerList.size()));
@@ -47,15 +48,17 @@ public class SalesReportService {
 		return lines;
 	}
 
-	private String getMostExpensiveSaleId(final List<Sale> salesList) {
+	private String getMostExpensiveSaleId(final List<LineLayout> salesList) {
 		return salesList.stream()
+				.map(Sale.class::cast)
 				.max(Comparator.comparing(Sale::getTotalSaleAmount))
 				.map(Sale::getSaleId)
 				.orElse(EMPTY);
 	}
 
-	private String getTheWorstSalesman(final List<Sale> salesList) {
+	private String getTheWorstSalesman(final List<LineLayout> salesList) {
 		return salesList.stream()
+				.map(Sale.class::cast)
 				.min(Comparator.comparing(Sale::getTotalSaleAmount))
 				.map(Sale::getSalesmanName)
 				.orElse(EMPTY);

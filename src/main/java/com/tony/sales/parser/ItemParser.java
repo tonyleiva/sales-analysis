@@ -17,19 +17,18 @@ public class ItemParser extends Parser {
 	private static final String ITEM_REGEX = "(\\d+)-(\\d+)-(\\d*\\.?\\d+)";
 	private static final Pattern ITEM_PATTERN = getPattern(ITEM_REGEX);
 
-	@Override
-	public boolean isValid(String itemsContent) {
-		final Matcher matcher = getMatcher(ITEM_PATTERN, itemsContent);
+	public boolean isItemsValid(final String line) {
+		final Matcher matcher = getMatcher(ITEM_PATTERN, line);
 		int count = 0;
 		while (matcher.find()) {
 			count++;
 		}
-		return validQuantityItems(count, itemsContent);
+		return validQuantityItems(count, line);
 	}
 
-	@Override
-	public List<Item> parse(String line) {
-		final Matcher matcher = getMatcher(ITEM_PATTERN, line);
+	public List<Item> parseItems(final String line) {
+		final String itemsContent = getItemsContent(line);
+		final Matcher matcher = getMatcher(ITEM_PATTERN, itemsContent);
 		final List<Item> items = new ArrayList<>();
 		while (matcher.find()) {
 			final String id = matcher.group(1);
@@ -40,7 +39,8 @@ public class ItemParser extends Parser {
 		return items;
 	}
 
-	private boolean validQuantityItems(final int expectedItems, final String itemsContent) {
+	private boolean validQuantityItems(final int expectedItems, final String line) {
+		final String itemsContent = getItemsContent(line);
 		final String comma = ",";
 		final String hyphen = "-";
 		final int expectedProperties = expectedItems * 3;
@@ -48,6 +48,12 @@ public class ItemParser extends Parser {
 		final int totalItems = itemsContent.split(comma).length;
 		final int totalProperties = replace(itemsContent, comma, hyphen).split(hyphen).length;
 		return expectedItems == totalItems && expectedProperties == totalProperties;
+	}
+
+	private String getItemsContent(final String line) {
+		final int beginIndex = line.indexOf("[");
+		final int endIndex = line.indexOf("]");
+		return line.substring(beginIndex, endIndex);
 	}
 
 }

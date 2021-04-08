@@ -1,6 +1,6 @@
 package com.tony.sales.parser;
 
-import com.tony.sales.exception.ParseLineException;
+import com.tony.sales.exception.LineException;
 import com.tony.sales.model.Customer;
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +37,7 @@ class CustomerParserTest {
 	void parseExceptionTest() {
 		final CustomerParser parser = new CustomerParser();
 
-		assertThrows(ParseLineException.class, () -> parser.parse("002ç234516754345443çJose da SilvaçRural"));
+		assertThrows(LineException.class, () -> parser.parse("002ç234516754345443çJose da SilvaçRural"));
 	}
 
 }

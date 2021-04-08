@@ -13,25 +13,25 @@ class ItemParserTest {
 	@Test
 	void isValidTrueTest() {
 		final ItemParser parser = new ItemParser();
-		assertTrue(parser.isValid("[1-10-100,2-30-2.50,3-40-3.10]"));
-		assertTrue(parser.isValid("[1-10-100,3-40-3.10]"));
-		assertTrue(parser.isValid("[1-10-100,3-40-3.10]"));
+		assertTrue(parser.isItemsValid("[1-10-100,2-30-2.50,3-40-3.10]"));
+		assertTrue(parser.isItemsValid("[1-10-100,3-40-3.10]"));
+		assertTrue(parser.isItemsValid("[1-10-100,3-40-3.10]"));
 	}
 
 	@Test
 	void isValidFalseTest() {
 		final ItemParser parser = new ItemParser();
-		assertFalse(parser.isValid("[1-10-1002-30-2.50,3-40-3.10]"));
-		assertFalse(parser.isValid("[1-10-100,340-3.10]"));
-		assertFalse(parser.isValid("[[1-10-100,340-3.10]"));
-		assertFalse(parser.isValid("[]"));
+		assertFalse(parser.isItemsValid("[1-10-1002-30-2.50,3-40-3.10]"));
+		assertFalse(parser.isItemsValid("[1-10-100,340-3.10]"));
+		assertFalse(parser.isItemsValid("[[1-10-100,340-3.10]"));
+		assertFalse(parser.isItemsValid("[]"));
 	}
 
 	@Test
 	void parseOkTest() {
 		final ItemParser parser = new ItemParser();
 
-		List<Item> items = parser.parse("[1-10-100,2-30-2.50,3-40-3.10]");
+		List<Item> items = parser.parseItems("[1-10-100,2-30-2.50,3-40-3.10]");
 		Item first = items.get(0);
 
 		assertEquals(3, items.size());
